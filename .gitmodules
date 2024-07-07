@@ -1,0 +1,6 @@
+[submodule "software/buildroot"]
+	path = software/buildroot
+	url = https://git.busybox.net/buildroot/
+[submodule "software/esp-hosted"]
+	path = software/esp-hosted
+	url = https://github.com/espressif/esp-hosted.git
