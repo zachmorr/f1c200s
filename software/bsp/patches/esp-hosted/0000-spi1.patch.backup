@@ -1,0 +1,13 @@
+diff --git a/esp_hosted_ng/host/spi/esp_spi.c b/esp_hosted_ng/host/spi/esp_spi.c
+index d0bd513..33ff9a9 100644
+--- a/esp_hosted_ng/host/spi/esp_spi.c
++++ b/esp_hosted_ng/host/spi/esp_spi.c
+@@ -419,7 +419,7 @@ static int spi_dev_init(int spi_clk_mhz)
+ 	strscpy(esp_board.modalias, "esp_spi", sizeof(esp_board.modalias));
+ 	esp_board.mode = SPI_MODE_2;
+ 	esp_board.max_speed_hz = spi_clk_mhz * NUMBER_1M;
+-	esp_board.bus_num = 0;
++	esp_board.bus_num = 1;
+ 	esp_board.chip_select = 0;
+ 
+ 	master = spi_busnum_to_master(esp_board.bus_num);
