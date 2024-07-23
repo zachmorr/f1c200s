@@ -11,4 +11,48 @@ wpa_passphrase ":-(" politetree633 > wpa.conf
 wpa_supplicant -d nl80211 -c wpa.conf -i espsta0 -B
 udhcpc -i espsta0
 
-spidev_test -d /dev/spidev0.0 -p 1234
+spidev_test -D /dev/spidev1.0 -p 1234 -v
+
+# Throughput test
+modprobe esp32_spi resetpin=111 clockspeed=5 raw_tp_mode=1
+
+# Board UART
+minicom -D /dev/ttyUSB0 -b 115200
+hw flow control = off
+
+# ESP UART
+../esp-idf/export.sh   
+idf.py -p /dev/ttyUSB1 monitor 
+
+# rebuild esp-hosted
+rm -rf output/build/esp-hosted-6a25417fc880fd744b3b0d93c11659c3e7d86384/
+make esp-hosted-rebuild
+
+# rebuild linux
+make linux-rebuild
+
+# flash
+../scripts/load.sh sdc
+
+# Setup esp_driver
+git checkout 6a25417fc880fd744b3b0d93c11659c3e7d86384
+cmake .
+. ./esp-idf/esport.sh
+cd network_adapter
+idf.py set-target esp32c3
+idf.py build flash monitor
+
+# build esp_hosted_fg
+make -j8 target=spi \
+            CROSS_COMPILE=~/projects/f1c200s/software/buildroot/output/host/bin/arm-buildroot-linux-gnueabi- \
+            KERNEL=~/projects/f1c200s/software/buildroot/output/build/linux-6.7 \
+            ARCH=arm \
+            ESP_SLAVE='CONFIG_TARGET_ESP32C3=y' \
+            CONFIG_TEST_RAW_TP="y"
+
+# build demo app
+make -j8 CROSS_COMPILE=~/projects/f1c200s/software/buildroot/output/host/bin/arm-buildroot-linux-gnueabi- 
+
+
+# load fg
+modprobe esp32_spi_fg resetpin=111
