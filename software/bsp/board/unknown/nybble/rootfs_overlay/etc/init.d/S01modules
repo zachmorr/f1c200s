@@ -1,0 +1,5 @@
+#!/bin/sh
+if [ $1="start" ]; then 
+    modprobe esp32_spi resetpin=111 clockspeed=10
+    sleep 6
+fi

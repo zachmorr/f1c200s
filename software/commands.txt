@@ -2,8 +2,8 @@ modprobe esp32_spi resetpin=111 clockspeed=10
 
 
 ifconfig espsta0 up
-wpa_passphrase ":-(" politetree633 > wpa.conf
-wpa_supplicant -d nl80211 -c wpa.conf -i espsta0 -B
+sudo sh -c "wpa_passphrase ':-(' politetree633 > /etc/network/wpa.conf"
+sudo wpa_supplicant -c /etc/network/wpa.conf -i espsta0 -B
 udhcpc -i espsta0
 
 spidev_test -D /dev/spidev1.0 -p 1234 -v

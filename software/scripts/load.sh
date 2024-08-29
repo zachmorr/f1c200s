@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 # Taken from https://linux-sunxi.org/Bootable_SD_card#Partitioning
 
 if [ -z "$1" ]
@@ -15,13 +15,6 @@ if [ ! -f $img ]; then
     echo "$img not found!"
 else
     dd if=$img of=/dev/$1 bs=1M
-fi
-
-spl=output/images/u-boot-sunxi-with-spl.bin
-if [ ! -f $spl ]; then
-    echo "$spl not found!"
-else
-    dd if=$spl of=/dev/$1 bs=1024 seek=8
 fi
 
 blockdev --rereadpt /dev/$1

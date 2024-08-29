@@ -1,1 +1,1 @@
-source "$BR2_EXTERNAL_F1C200S_PATH/package/esp-hosted-fork/Config.in"
+source "$BR2_EXTERNAL_NYBBLE_PATH/package/esp-hosted-fork/Config.in"
