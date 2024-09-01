@@ -1,7 +1,7 @@
 [submodule "software/buildroot"]
 	path = software/buildroot
 	url = https://git.busybox.net/buildroot/
-[submodule "software/bsp/package/esp-hosted-fork/esp-hosted"]
-	path = software/bsp/package/esp-hosted-fork/esp-hosted
+[submodule "software/esp-hosted"]
+	path = software/esp-hosted
 	url = git@github.com:zachmorr/esp-hosted.git
 	branch = f1c200s
