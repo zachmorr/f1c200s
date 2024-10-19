@@ -26,7 +26,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "wifi.kicad_sch"
+		(property "Sheetfile" "peripherals.kicad_sch"
 			(at 93.98 125.0446 0)
 			(effects
 				(font
