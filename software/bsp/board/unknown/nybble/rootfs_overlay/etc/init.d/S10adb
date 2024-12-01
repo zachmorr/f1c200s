@@ -1,0 +1,36 @@
+#!/bin/sh
+
+modprobe libcomposite
+modprobe usb_f_fs
+modprobe usb_f_acm
+mount none /sys/kernel/config -t configfs
+
+mkdir /sys/kernel/config/usb_gadget/g1
+echo 0x8087 > /sys/kernel/config/usb_gadget/g1/idVendor
+echo 0x101e > /sys/kernel/config/usb_gadget/g1/idProduct
+
+mkdir /sys/kernel/config/usb_gadget/g1/strings/0x409
+echo 012345678 > /sys/kernel/config/usb_gadget/g1/strings/0x409/serialnumber
+echo Intel > /sys/kernel/config/usb_gadget/g1/strings/0x409/manufacturer
+echo IoTplatform > /sys/kernel/config/usb_gadget/g1/strings/0x409/product
+
+mkdir /sys/kernel/config/usb_gadget/g1/functions/acm.GS0
+mkdir /sys/kernel/config/usb_gadget/g1/functions/ffs.adb
+
+mkdir /sys/kernel/config/usb_gadget/g1/configs/c.1
+mkdir /sys/kernel/config/usb_gadget/g1/configs/c.1/strings/0x409
+echo "adb+cdc" > /sys/kernel/config/usb_gadget/g1/configs/c.1/strings/0x409/configuration
+echo 120 > /sys/kernel/config/usb_gadget/g1/configs/c.1/MaxPower
+
+ln -s /sys/kernel/config/usb_gadget/g1/functions/acm.GS0 /sys/kernel/config/usb_gadget/g1/configs/c.1
+ln -s /sys/kernel/config/usb_gadget/g1/functions/ffs.adb/ /sys/kernel/config/usb_gadget/g1/configs/c.1
+
+mkdir /dev/usb-ffs
+mkdir /dev/usb-ffs/adb
+mount -t functionfs adb /dev/usb-ffs/adb
+
+ifconfig lo up
+adbd &
+sleep 2
+
+echo "musb-hdrc.1.auto" > /sys/kernel/config/usb_gadget/g1/UDC

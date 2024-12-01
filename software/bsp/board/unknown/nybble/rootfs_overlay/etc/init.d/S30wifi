@@ -1,4 +1,0 @@
-#!/bin/sh
-if [ $1="start" ]; then 
-    wpa_supplicant -D nl80211 -c /etc/network/wpa.conf -i espsta0 -B
-fi

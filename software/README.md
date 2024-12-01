@@ -2,7 +2,7 @@
 ```
 git submodule update --init
 cd buildroot
-make BR2_EXTERNAL=$PWD/../bsp licheepi_nano_defconfig
+make BR2_EXTERNAL=$PWD/../bsp nybble_defconfig
 make
 ```
 
