@@ -1,0 +1,54 @@
+#!/bin/sh
+DAEMON="adbd"
+PIDFILE="/var/run/$DAEMON.pid"
+
+CONNMAND_ARGS=""
+
+[ -r "/etc/default/$DAEMON" ] && . "/etc/default/$DAEMON"
+
+start() {
+        printf 'Starting %s: ' "$DAEMON"
+        start-stop-daemon -S -b -m -p "$PIDFILE" -x "$DAEMON" \
+                -- $ARGS
+        status=$?
+        if [ "$status" -eq 0 ]; then
+                sleep 1
+                echo "musb-hdrc.1.auto" > /sys/kernel/config/usb_gadget/g1/UDC
+                echo "OK"
+        else
+                echo "FAIL"
+        fi
+        return "$status"
+}
+
+stop() {
+        printf 'Stopping %s: ' "$DAEMON"
+        start-stop-daemon -K -p "$PIDFILE"
+        status=$?
+        if [ "$status" -eq 0 ]; then
+                sleep 1
+                echo "" > /sys/kernel/config/usb_gadget/g1/UDC
+                echo "OK"
+                
+        else
+                echo "FAIL"
+        fi
+        return "$status"
+}
+
+restart() {
+        stop
+        sleep 1
+        start
+}
+
+case "$1" in
+        start|stop)
+                "$1";;
+        *)
+                echo "Usage: $0 {start|stop}"
+                exit 1
+esac
+
+
+

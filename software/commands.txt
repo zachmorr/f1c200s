@@ -1,35 +1,12 @@
-modprobe esp32_spi resetpin=111 clockspeed=10
-
-
+modprobe esp32_spi resetpin=111
 ifconfig espsta0 up
-sudo sh -c "wpa_passphrase ':-(' politetree633 > /etc/network/wpa.conf"
-sudo wpa_supplicant -c /etc/network/wpa.conf -i espsta0 -B
+wpa_passphrase ':-(' politetree633 > /etc/network/wpa.conf
+wpa_supplicant -c /etc/network/wpa.conf -i espsta0 -B
 udhcpc -i espsta0
-
-spidev_test -D /dev/spidev1.0 -p 1234 -v
 
 # Throughput test
 modprobe esp32_spi resetpin=111 clockspeed=5 raw_tp_mode=1
 
-# Board UART
-minicom -D /dev/ttyUSB0 -b 115200
-hw flow control = off
 
-# ESP UART
-../esp-idf/export.sh   
-idf.py -p /dev/ttyUSB1 monitor 
 
-# rebuild linux
-make linux-rebuild
-
-# flash
-../scripts/load.sh sdc
-
-# Setup esp_driver
-git checkout 6a25417fc880fd744b3b0d93c11659c3e7d86384
-cmake .
-. ./esp-idf/esport.sh
-cd network_adapter
-idf.py set-target esp32c3
-idf.py build flash monitor
 
