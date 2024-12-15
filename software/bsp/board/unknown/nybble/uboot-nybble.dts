@@ -33,9 +33,6 @@
 	vmmc-supply = <&reg_vcc3v3>;
 };
 
-&otg_sram {
-	status = "okay";
-};
 
 &uart0 {
 	pinctrl-names = "default";
